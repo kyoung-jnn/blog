@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+@import '@radix-ui/colors/gray.css';
+@import '@radix-ui/colors/gray-dark.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-gray-1: var(--gray-1);
+  --color-gray-2: var(--gray-2);
+  --color-gray-3: var(--gray-3);
+  --color-gray-4: var(--gray-4);
+  --color-gray-5: var(--gray-5);
+  --color-gray-6: var(--gray-6);
+  --color-gray-7: var(--gray-7);
+  --color-gray-8: var(--gray-8);
+  --color-gray-9: var(--gray-9);
+  --color-gray-10: var(--gray-10);
+  --color-gray-11: var(--gray-11);
+  --color-gray-12: var(--gray-12);
+}
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+}
+
+@theme {
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
+  @keyframes fade-left {
+    from {
+      opacity: 0;
+      transform: translateX(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes rotate-sun {
+    0% {
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+    60% {
+      opacity: 1;
+      transform: rotate(20deg);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(0);
+    }
+  }
+
+  @keyframes rotate-moon {
+    0% {
+      opacity: 0;
+      transform: rotate(45deg);
+    }
+    60% {
+      opacity: 1;
+      transform: rotate(-20deg);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(0);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gray-5) transparent;
+  }
+
+  body {
+    font-family:
+      'Pretendard Variable',
+      Pretendard,
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      Roboto,
+      'Helvetica Neue',
+      'Segoe UI',
+      'Apple SD Gothic Neo',
+      'Noto Sans KR',
+      'Malgun Gothic',
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol',
+      sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+    color: var(--color-gray-12);
+    background-color: var(--color-gray-3);
+    transition:
+      color 0.3s,
+      background-color 0.3s;
+  }
+
+  a {
+    color: var(--color-gray-12);
+  }
+
+  ul,
+  li {
+    list-style: none;
+    padding: 0;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-gray-12);
+  }
+}

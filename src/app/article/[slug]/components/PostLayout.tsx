@@ -1,0 +1,51 @@
+import { PropsWithChildren } from 'react';
+
+import Image from 'next/image';
+
+
+import PostActions from '@/app/article/[slug]/components/PostActions';
+import PostFooter from '@/app/article/[slug]/components/PostFooter';
+import TOC from '@/app/article/[slug]/components/TOC';
+import Sidebar from '@/components/Sidebar';
+import { dateToStringWithDash } from '@/utils';
+
+interface Props {
+  title: string;
+  date: string;
+  thumbnail?: string;
+}
+
+function PostLayout({ title, date, thumbnail, children }: PropsWithChildren<Props>) {
+  const updatedAt = dateToStringWithDash(date);
+
+  return (
+    <div className="tablet:grid tablet:grid-cols-[192px_640px_192px] tablet:items-start tablet:justify-center relative mt-[60px] flex flex-col gap-2.5">
+      {/* TOC sidebar */}
+      <Sidebar>
+        <TOC />
+        <PostActions />
+      </Sidebar>
+
+      {/* post content */}
+      <div className="tablet:col-start-2 tablet:col-end-3 animate-[fade-up_0.5s_forwards]">
+        <header className="mb-5 text-left">
+          <h1 className="text-[30px] font-bold">{title}</h1>
+          <time dateTime={updatedAt} className="text-gray-9 dark:text-gray-11 block text-base">
+            {updatedAt}
+          </time>
+          {thumbnail && (
+            <figure className="relative m-0 mt-2.5 aspect-video w-full overflow-hidden rounded-lg">
+              <Image src={thumbnail} alt="post thumbnail" fill priority className="object-cover" />
+            </figure>
+          )}
+        </header>
+        {children}
+      </div>
+
+      {/* post footer */}
+      <PostFooter />
+    </div>
+  );
+}
+
+export default PostLayout;

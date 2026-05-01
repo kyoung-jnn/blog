@@ -1,0 +1,10 @@
+{
+  "attachmentFolderPath": "public/images",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "posts",
+  "useMarkdownLinks": true,
+  "showLineCount": true,
+  "strictLineBreaks": true,
+  "propertiesInDocument": "visible",
+  "livePreview": true
+}
