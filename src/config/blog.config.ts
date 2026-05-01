@@ -6,37 +6,48 @@
  */
 const config = {
   // ─── Site ──────────────────────────────────────────────────────────
-  title: 'My Blog',
-  description: 'A blog about technology',
+  title: "KyoungJin Roh's Blog",
+  description: '생각 정리 및 기록',
   locale: 'ko',
-  siteUrl: '',
-  siteLogo: '',
-  siteBanner: '',
+  siteUrl: 'https://kyoung-jnn.com',
+  siteLogo: 'https://i.ibb.co/K7PsQQY/logo.png',
+  siteBanner: 'https://i.ibb.co/vswNk1C/banner.png',
 
   // ─── Author ────────────────────────────────────────────────────────
   author: {
-    localeName: 'Author Name',
-    enName: 'Author Name',
-    bio: 'Write a brief introduction about yourself',
+    localeName: '노경진',
+    enName: 'KyoungJin Roh',
+    bio: 'Frontend Engineer',
     contacts: {
-      email: '',
-      github: '',
-      linkedin: '',
+      email: 'rudwls468@gmail.com',
+      github: 'https://github.com/kyoung-jnn',
+      linkedin: 'https://www.linkedin.com/in/%EA%B2%BD%EC%A7%84-%EB%85%B8-028b7421b/',
       twitter: '',
-      rss: '',
+      rss: 'https://kyoung-jnn.com/rss.xml',
     },
   },
 
   // ─── Comments (https://giscus.app) ─────────────────────────────────
   giscus: {
-    repo: '',
-    repoId: '',
-    category: 'Comments',
-    categoryId: '',
+    repo: 'kyoung-jnn/blog',
+    repoId: 'R_kgDOSRb1-Q',
+    category: 'Announcements',
+    categoryId: 'DIC_kwDOSRb1-c4C8GoH',
   },
 
   // ─── Navigation ────────────────────────────────────────────────────
-  navigation: [{ href: '/article/list/1', name: 'articles', description: 'all posts' }],
+  navigation: [
+    {
+      href: '/article/list/1',
+      name: 'articles • 글',
+      description: '개발 및 이것저것 포스팅',
+    },
+    {
+      href: '/gallery',
+      name: 'gallery • 사진',
+      description: '일상 및 여행 사진',
+    },
+  ],
 };
 
 export default config;

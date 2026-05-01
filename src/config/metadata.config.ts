@@ -7,7 +7,6 @@ export const METADATA_CONFIG: Metadata = {
   robots: { index: true, follow: true },
   description: blogConfig.description,
   applicationName: blogConfig.title,
-
   publisher: blogConfig.author.localeName,
   creator: blogConfig.author.localeName,
   authors: [{ name: blogConfig.author.localeName, url: blogConfig.siteUrl }],

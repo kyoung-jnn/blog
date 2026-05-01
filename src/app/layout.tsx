@@ -44,8 +44,6 @@ function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
           href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/variable/pretendardvariable-dynamic-subset.min.css"
         />
-        {/* Search Engine Verification - Replace with your own verification code */}
-        {/* <meta name="naver-site-verification" content="your-verification-code" /> */}
         <link
           rel="alternate"
           type="application/rss+xml"
