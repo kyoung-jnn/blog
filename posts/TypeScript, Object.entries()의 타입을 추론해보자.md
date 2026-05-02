@@ -7,7 +7,7 @@ thumbnail:
 
 # Object.entries()
 `Object.entries()`는 `enumerable` 속성이 있는 값을 가진 `[key, value]` 쌍 **배열**을 반환한다. 이를 통해 우리는 객체 내부를 반복문을 **순회 및 탐색**이 가능해진다.
-```typescript
+```typescript {2,3}
 const obj = {
   a: 10,
   b: 20,

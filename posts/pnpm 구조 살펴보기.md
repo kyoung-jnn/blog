@@ -8,7 +8,7 @@ thumbnail:
 # Performant NPM
 pnpm의 이름은 **Performant npm**의 줄임말로, 핵심 철학을 담고 있다. Node.js 공식 레지스트리를 그대로 이용하면서도 **Content-Addressable Store**와 **하드 링크/심볼릭 링크**를 결합해 기존 npm보다 더 빠르고 가벼운 설치 과정을 제공한다.
 궁금해서 다른 패키지 매니저도 찾아봤는데 npm은 node package manager, yarn은 "실타래"를 의미하는 영단어에서 차용했다고 한다.
-![원래는 yarn은 kpm이 될 뻔했다.. yarn maintainer 게시물](pnpm-yarn-kpm.png)
+![원래는 yarn은 kpm이 될 뻔했다.. yarn maintainer 게시물|553](pnpm-yarn-kpm.png)
 # Content-Addressable Storage
 pnpm의 가장 큰 특징은 **Content-Addressable Store** 방식이다. 파일의 내용을 기반으로 해시값을 생성하고, 이 해시값을 주소로 사용해 파일을 저장한다. 말 그대로 Content를 통해 Address를 생성한다.
 같은 내용의 파일은 같은 해시값을 가지므로, 여러 프로젝트에서 동일한 패키지 버전을 사용하더라도 실제 파일은 한 곳(글로벌 스토어)에만 저장된다.

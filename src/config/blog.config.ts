@@ -31,8 +31,8 @@ const config = {
   giscus: {
     repo: 'kyoung-jnn/blog',
     repoId: 'R_kgDOSRb1-Q',
-    category: 'Announcements',
-    categoryId: 'DIC_kwDOSRb1-c4C8GoH',
+    category: 'Comments',
+    categoryId: 'DIC_kwDOSRb1-c4C8Gx-',
   },
 
   // ─── Navigation ────────────────────────────────────────────────────
