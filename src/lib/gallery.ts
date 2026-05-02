@@ -71,7 +71,10 @@ const fetchGallery = async (): Promise<GalleryItem[]> => {
   );
 };
 
-// Cached fetch — invalidate via revalidatePath('/gallery'). 24h ISR fallback.
+// Cached fetch with infinite TTL — invalidate only by:
+//   1. POST /api/revalidate-gallery (fired manually from GitHub Actions)
+//   2. New deployment (Vercel resets cache on every deploy)
+// No automatic ISR expiration → minimizes Vercel Blob Advanced Operations.
 export const getGalleryItems = unstable_cache(fetchGallery, [GALLERY_CACHE_KEY], {
-  revalidate: 60 * 60 * 24,
+  revalidate: false,
 });
