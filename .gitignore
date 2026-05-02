@@ -64,3 +64,5 @@ src/config/blog.config.ts
 Vault.md
 
 # End of https://www.toptal.com/developers/gitignore/api/nextjs
+# Gallery assets are hosted on Vercel Blob, not in git
+public/gallery/
