@@ -42,7 +42,7 @@ function ImageViewer({ gallery = '.markdown-render' }: Props) {
 
     lightbox.init();
     return () => lightbox.destroy();
-  }, []);
+  }, [gallery]);
 
   // --- Code copy button (rehype-pretty-code transformer injects button HTML, sanitize strips onclick) ---
   useEffect(() => {
