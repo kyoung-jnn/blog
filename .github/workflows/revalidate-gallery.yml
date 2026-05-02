@@ -21,7 +21,8 @@ jobs:
             echo "::error::SITE_URL or REVALIDATE_SECRET secret is not set"
             exit 1
           fi
-          response=$(curl -sS -o /tmp/body.json -w "%{http_code}" \
+          # -L: follow 308/3xx redirects (e.g. www <-> apex, http -> https)
+          response=$(curl -sSL -o /tmp/body.json -w "%{http_code}" \
             -X POST "${SITE_URL}/api/revalidate-gallery?secret=${REVALIDATE_SECRET}")
           echo "HTTP ${response}"
           cat /tmp/body.json
