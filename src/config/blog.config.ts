@@ -10,8 +10,8 @@ const config = {
   description: '생각 정리 및 기록',
   locale: 'ko',
   siteUrl: 'https://kyoung-jnn.com',
-  siteLogo: 'https://i.ibb.co/K7PsQQY/logo.png',
-  siteBanner: 'https://i.ibb.co/vswNk1C/banner.png',
+  siteLogo: 'https://kyoung-jnn.com/icon.ico',
+  siteBanner: 'https://kyoung-jnn.com/banner.png',
 
   // ─── Author ────────────────────────────────────────────────────────
   author: {
