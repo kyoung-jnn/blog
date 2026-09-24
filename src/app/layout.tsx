@@ -1,9 +1,7 @@
-import { ReactNode } from 'react';
-
-import { Metadata, Viewport } from 'next';
-
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata, Viewport } from 'next';
+import type { ReactNode } from 'react';
 
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
@@ -52,6 +50,8 @@ function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
           href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/variable/pretendardvariable-dynamic-subset.min.css"
         />
+        {/* Search Engine Verification - Replace with your own verification code */}
+        {/* <meta name="naver-site-verification" content="your-verification-code" /> */}
         <link
           rel="alternate"
           type="application/rss+xml"

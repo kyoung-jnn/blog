@@ -1,5 +1,5 @@
 import { revalidatePath } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 const GALLERY_PATH = '/gallery';
 

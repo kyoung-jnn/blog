@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 import GalleryPhoto from '@/app/gallery/components/GalleryPhoto';
 import GalleryVideo from '@/app/gallery/components/GalleryVideo';
