@@ -36,6 +36,14 @@ Claude Code CLI를 매일 쓰면서도 이게 React로 돌아간다는 생각은
 
 그 다리 역할을 한 것이 [Ink](https://github.com/vadimdemedes/ink)다. Ink는 React 컴포넌트를 터미널 UI로 렌더링하는 라이브러리다. `div` 대신 `Box`, `span` 대신 `Text`를 쓴다고 생각하면 얼추 맞다.
 
+```mermaid
+flowchart LR
+  R["React<br/>컴포넌트 · 상태 · reconciler"]
+  R --> RD[react-dom] --> DOM[브라우저 DOM]
+  R --> RN[React Native] --> NV[iOS · Android native view]
+  R --> INK[Ink] --> TERM[터미널]
+```
+
 ```tsx
 import { Box, Text } from 'ink'
 
@@ -55,18 +63,17 @@ function Status() {
 
 흐름을 단순하게 그리면 이렇다.
 
-```text
-상태 변경
-  ↓
-React 컴포넌트 렌더링
-  ↓
-Reconciler가 이전 트리와 비교
-  ↓
-Ink가 Box, Text 등을 터미널 레이아웃으로 계산
-  ↓
-ANSI escape code를 stdout에 출력
-  ↓
-터미널 화면 갱신
+```mermaid
+flowchart TD
+  subgraph React
+    A[상태 변경] --> B[React 컴포넌트 렌더링]
+    B --> C[Reconciler가 이전 트리와 비교]
+  end
+  subgraph Ink
+    D[Box, Text 등을 터미널 레이아웃으로 계산] --> E[ANSI escape code를 stdout에 출력]
+  end
+  C --> D
+  E --> F[터미널 화면 갱신]
 ```
 
 여기서 핵심은 `Reconciler`다. **React는 상태가 바뀔 때마다 화면 전체를 새로 그리는 라이브러리가 아니다.** 이전 컴포넌트 트리와 새 트리를 비교하고, 바뀐 부분만 renderer에게 전달한다.
@@ -164,12 +171,10 @@ Yoga는 Meta가 만든 **독립적으로 끼워 넣을 수 있는 Flexbox layout
 Yoga에게 node tree와 `flexDirection`, `padding`, `flexGrow` 같은 style을 넘기면, 각 node의 `x`, `y`, `width`, `height`를 계산해준다.  
 실제 픽셀을 그리거나 DOM을 만드는 일은 그 다음 단계의 renderer가 맡는다.
 
-```text
-React component tree
-  ↓
-Yoga: 각 node의 위치와 크기 계산
-  ↓
-renderer: 계산 결과를 실제 화면에 그리기
+```mermaid
+flowchart LR
+  A["React component tree<br/>+ style"] --> B["Yoga<br/>각 node의 위치와 크기 계산"]
+  B -- "x, y, width, height" --> C["renderer<br/>계산 결과를 실제 화면에 그리기"]
 ```
 
 React Native에서 본 구조도 이와 같다. `<View style={{ flexDirection: 'row' }} />`를 선언하면 Yoga가 native view의 frame을 계산하고, iOS/Android renderer가 그 frame을 화면에 그린다. React Native의 `View` default 방향이 `column`인 것도 Yoga의 영향이다. 웹 CSS Flexbox의 default가 `row`인 것과 살짝 다르다. ([React Native Flexbox 문서](https://reactnative.dev/docs/flexbox))
@@ -211,20 +216,35 @@ React commit 뒤 layout을 계산하고, microtask로 render를 미룬 다음, �
 `useLayoutEffect`가 최신 layout 값을 읽을 수 있고, token이 빠르게 들어와도 화면이 필요 이상으로 흔들리지 않는다.  
 말 그대로 terminal에서 60fps를 목표로 한 render loop다.
 
+```mermaid
+sequenceDiagram
+  participant R as React
+  participant Y as Yoga
+  participant Q as Render 스케줄러
+  participant T as stdout
+  R->>Y: commit (token 1 도착)
+  Y->>Q: layout 계산 후 render 예약 (microtask)
+  R->>Y: commit (token 2 도착)
+  Y->>Q: layout 계산 후 render 예약
+  Note over Q: 약 16ms 동안 요청을 묶는다
+  Q->>T: frame diff patch를 한 번에 출력
+```
+
 ## 터미널에 event system까지 있다
 
 더 놀라운 부분은 입력 처리다. 일반 CLI라면 `stdin.on('data')`에서 키를 받아 조건문으로 분기하면 끝난다. Claude Code는 focus manager를 두고, target node를 찾은 뒤 capture/bubble 단계로 event를 dispatch한다.
 
-```text
-키 입력
-  ↓
-현재 focus를 가진 Ink node 확인
-  ↓
-capture phase
-  ↓
-target handler
-  ↓
-bubble phase
+```mermaid
+sequenceDiagram
+  participant App
+  participant P as PermissionPrompt
+  participant S as Select (focus)
+  Note over App,S: 키 입력 → 현재 focus를 가진 Ink node가 target
+  App->>P: capture
+  P->>S: capture
+  Note over S: target handler 실행
+  S-->>P: bubble
+  P-->>App: bubble
 ```
 
 웹의 click event 흐름과 거의 같다. 그래서 input, autocomplete, modal, scrollable pane이 동시에 있어도 각 컴포넌트가 자기 이벤트를 처리할 수 있다. mouse tracking, text selection, scroll region까지 구현되어 있는 이유도 여기에 있다. 터미널에 브라우저의 UI model을 옮겨놓은 느낌이다.
@@ -235,18 +255,20 @@ bubble phase
 
 Claude Code의 화면은 사실 웹 앱의 채팅 화면과 닮아 있다.
 
-```text
-입력
-  ↓
-메시지 추가
-  ↓
-모델 스트리밍
-  ↓
-tool 호출 카드 추가
-  ↓
-권한 요청 또는 결과 표시
-  ↓
-다음 입력 대기
+```mermaid
+flowchart TD
+  A[입력] --> B[메시지 추가]
+  B --> C[모델 스트리밍]
+  C --> D{tool 호출?}
+  D -- 있음 --> E[tool 호출 카드 추가]
+  E --> F{권한 필요?}
+  F -- 예 --> G[권한 요청]
+  G -- 허용 --> H[tool 실행 · 결과 표시]
+  G -- 거절 --> C
+  F -- 아니오 --> H
+  H --> C
+  D -- 없음 --> I[다음 입력 대기]
+  I --> A
 ```
 
 이 흐름에는 비동기 이벤트가 계속 들어온다. 모델의 token, subprocess 출력, 파일 변경 결과, 키보드 입력, terminal resize가 거의 동시에 도착한다. React의 단방향 데이터 흐름과 컴포넌트 단위 분리는 이런 UI를 다루기에 꽤 잘 맞는다.
@@ -307,6 +329,22 @@ Grep은 검색 패턴과 경로를, Bash는 실행한 명령과 stdout 일부를
 `file_path`만 도착한 상태라면 일단 "Reading src/App.tsx"를 그려두고, 나머지 parameter가 도착하면 같은 component를 다시 렌더링하면 된다.  
 UI가 API 응답의 완성을 기다리지 않는다.
 
+```mermaid
+sequenceDiagram
+  participant M as 모델 응답 stream
+  participant T as Tool
+  participant UI as Transcript
+  M->>T: tool_use 시작, file_path만 도착
+  T->>UI: renderToolUseMessage(Partial input)
+  M->>T: 나머지 parameter 도착
+  T->>UI: 같은 component 다시 렌더링
+  T->>T: call(input)
+  loop 실행 중
+    T->>UI: renderToolUseProgressMessage(progress)
+  end
+  T->>UI: renderToolResultMessage(result)
+```
+
 ```tsx
 function renderToolUseMessage(input: Partial<GrepInput>) {
   if (!input.pattern) return <Text dimColor>Searching...</Text>
@@ -349,18 +387,15 @@ Claude Code를 쓰다 terminal 창 폭을 바꾸면 markdown table, 코드 블�
 
 terminal의 `resize` event가 오면 root node의 너비를 새 column 수로 바꾸고 Yoga layout을 다시 계산한다. 그 결과를 새 back buffer에 paint하고, 이전 front buffer와 diff를 내보낸다. 화면을 통째로 초기화하지 않으니 긴 대화 중간에서도 scroll 위치와 선택 상태를 최대한 유지할 수 있다.
 
-```text
-terminal resize
-  ↓
-root Yoga width 변경
-  ↓
-모든 flex layout 재계산
-  ↓
-새 frame paint
-  ↓
-이전 frame과 diff
-  ↓
-바뀐 cell만 stdout에 반영
+```mermaid
+flowchart TD
+  S[상태 변경] --> RC[React reconcile · commit]
+  RZ([terminal resize]) --> W[root Yoga width 변경]
+  RC --> L[모든 flex layout 재계산]
+  W --> L
+  L --> P[새 frame paint]
+  P --> DF[이전 frame과 diff]
+  DF --> O[바뀐 cell만 stdout에 반영]
 ```
 
 웹에서 `window.resize`를 받고 responsive layout을 다시 그리는 것과 구조가 같다. 출력 매체가 terminal일 뿐이다.
